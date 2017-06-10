@@ -7,6 +7,8 @@
     $selectResult = mysqli_query($connect, $selectSQL);
 
     $selectRowCount = mysqli_num_rows($selectResult);
+
+    echo "rowCount : ";
     echo $selectRowCount;
 
     if($selectRowCount == 0) {
