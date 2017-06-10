@@ -1,7 +1,7 @@
 <?php
     $current_time = date("Y-m-j H:i:s");
-    $connect = mysql_connect("localhost:3306", "smartmirror", "root", "flvmfptl1");
-    mysql_set_charset($connect, "utf8");
+    $connect = mysqli_connect("localhost:3306", "smartmirror", "root", "flvmfptl1");
+    mysqli_set_charset($connect, "utf8");
 
     $selectSQL = "select * from schedule where schedule_time >= '$current_time'";
     $selectResult = mysql_query($connect, $selectSQL);
