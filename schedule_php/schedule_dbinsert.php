@@ -4,7 +4,7 @@
 
     //database :: smartmirror
     //table :: schedule(_id[int], schedule_time[datetime], subject[varchar(200)] )
-    $connect = mysqli_connect("localhost:3306","smartmirror","root","flvmfptl1");
+    $connect = mysqli_connect("localhost:3306","root","flvmfptl1","smartmirror");
     mysqli_set_charset($connect, "utf8");
 
     $insertSQL = "insert into schedule values(NULL, '$p_date', '$p_subject')";
