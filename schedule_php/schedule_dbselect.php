@@ -4,7 +4,7 @@
     mysqli_set_charset($connect, "utf8");
 
     $selectSQL = "select * from schedule where schedule_time >= '$current_time'";
-    $selectResult = mysql_query($connect, $selectSQL);
+    $selectResult = mysqli_query($connect, $selectSQL);
 
     $selectRowCount = mysql_num_rows($selectResult);
 
