@@ -10,9 +10,9 @@
         echo "검색 결과가 없음";
     }else if(mysqli_num_rows($selectResult) >= 1) {
         //검색된 행 존재 -> 결과 표시
-        while ($row = mysqli_fetch_array($selectResult)) {
-            echo "Schedule_Time : $row['schedule_time'] ";
-            echo "Subject : $row['subject'] ";
+        while($row = mysqli_fetch_row($selectResult)) {
+            echo "Schedule_Time : $row[1] ";
+            echo "Subject : $row[2] ";
             echo "<br />";
         }
     }
