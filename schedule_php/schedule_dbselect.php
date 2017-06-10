@@ -6,11 +6,8 @@
     $selectSQL = "select * from schedule where schedule_time >= '$current_time'";
     $selectResult = mysqli_query($connect, $selectSQL);
 
-    echo $current_time;
-    echo "<br />";
-    echo $selectSQL;
-
     $selectRowCount = mysqli_num_rows($selectResult);
+    echo $selectRowCount;
 
     if($selectRowCount == 0) {
         echo "검색 결과가 없음";
