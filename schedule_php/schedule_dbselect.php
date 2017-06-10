@@ -6,9 +6,11 @@
     $selectSQL = "select * from schedule where schedule_time >= '$current_time'";
     $selectResult = mysqli_query($connect, $selectSQL);
 
-    if(mysqli_num_rows($selectResult) == 0) {
+    $selectRowCount = mysqli_num_rows($selectResult);
+
+    if($selectRowCount == 0) {
         echo "검색 결과가 없음";
-    }else if(mysqli_num_rows($selectResult) >= 1) {
+    }else if($selectRowCount >= 1) {
         //검색된 행 존재 -> 결과 표시
         while($row = mysqli_fetch_row($selectResult)) {
             echo "Schedule_Time : $row[1] ";
