@@ -1,6 +1,8 @@
 <?php
     $p_date = $_POST["p_date"];
     $p_subject = $_POST["p_subject"];
+    echo $p_date;
+    echo $p_subject;
 
     //database :: smartmirror
     //table :: schedule(_id[int], schedule_time[datetime], subject[varchar(200)] )

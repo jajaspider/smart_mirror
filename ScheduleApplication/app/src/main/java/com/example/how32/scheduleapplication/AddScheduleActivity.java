@@ -59,7 +59,7 @@ public class AddScheduleActivity extends AppCompatActivity {
                 time = timeText.getText().toString();
                 subject = subjectText.getText().toString();
 
-                dateTime = date + " " + time;
+                dateTime = date + "" + time;
                 dataInsert("http://finite.servegame.com:25565/schedule_dbinsert.php", dateTime, subject);
                 break;
         }
