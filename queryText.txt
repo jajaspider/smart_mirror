@@ -1,0 +1,1 @@
+SELECT _id, (6371*acos(cos(radians(35.1468))*cos(radians(gpsY))*cos(radians(gpsX)-radians(129.032))+sin(radians(35.1468))*sin(radians(gpsY)))) AS distance, gpsX, gpsY FROM bus_station HAVING distance < 5 ORDER BY distance LIMIT 0 , 5;

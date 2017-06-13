@@ -1,11 +1,16 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import os
 import urllib.request
 from xml.dom import minidom
 import datetime
-
+import pymysql
 
 def crolling():
+    # 데이터베이스 연결
+    conn = pymysql.connect(host='localhost', user='root', password='flvmfptl1', db='smartmirror', charset='utf8')
+    cursor = conn.cursor()
+    sql = """insert into bus_station values (NULL, %s, %s, %s, %s)"""
     # 현재 시간 기록
     now_time = datetime.datetime.now()
     now_time = now_time.strftime('%Y%m%d%H%M%S')
@@ -22,27 +27,38 @@ def crolling():
     print('---------------------')
     data_count =0
     for item in items:
+        bStopID = ''
+        bStopNM = ''
+        gpsX = '0.0'
+        gpsY = '0.0'
         for node in item.childNodes:
             if node.nodeName == "bstopId":
                 system_log(now_time, '[BusLocationSystem] ' + node.childNodes[0].nodeValue + ' bstopId Find')
                 location_log(now_time, node.childNodes[0].nodeValue)
+                bStopID = node.childNodes[0].nodeValue
                 print(node.childNodes[0].nodeValue)
             if node.nodeName == "bstopNm":
                 system_log(now_time, '[BusLocationSystem] ' + node.childNodes[0].nodeValue + ' bstopNm Find')
                 location_log(now_time, node.childNodes[0].nodeValue)
+                bStopNM = node.childNodes[0].nodeValue
                 print(node.childNodes[0].nodeValue)
             if node.nodeName == "gpsX":
                 system_log(now_time, '[BusLocationSystem] ' + node.childNodes[0].nodeValue + ' gpsX Find')
                 location_log(now_time, node.childNodes[0].nodeValue)
+                gpsX = float(node.childNodes[0].nodeValue)
                 print(node.childNodes[0].nodeValue)
             if node.nodeName == "gpsY":
                 system_log(now_time, '[BusLocationSystem] ' + node.childNodes[0].nodeValue + ' gpsY Find')
                 location_log(now_time, node.childNodes[0].nodeValue)
+                gpsY = float(node.childNodes[0].nodeValue)
                 print(node.childNodes[0].nodeValue)
                 location_log(now_time, '---------------')
                 print('---------------------')
-            data_count+=1
+        cursor.execute(sql, (bStopID, bStopNM, gpsX, gpsY))
+        conn.commit()
+        data_count+=1
     print("data_count : "+str(data_count))
+    conn.close()
     # time.sleep(90)
     # crolling()
 
