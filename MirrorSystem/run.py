@@ -329,12 +329,14 @@ elif now_temp < min_temp:
     # 에어컨 끄기
     os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_OFF")
 
-th1 = threading.Thread(target=integrated)
-th1.start()
-th1.join()
+
 th2 = threading.Thread(target=opencv_view)
 th2.start()
 th2.join()
+th1 = threading.Thread(target=integrated)
+th1.start()
+th1.join()
+
 
 
 
