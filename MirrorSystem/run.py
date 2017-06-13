@@ -280,6 +280,7 @@ if cam.isOpened() == False:
 cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
 
+integrated()
 th = threading.Thread(target=integrated)
 th.start()
 th.join()
