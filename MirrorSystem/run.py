@@ -227,7 +227,7 @@ def metro_parse():
             if now_arrive_flag == 1 & first_2 == 1:
                 if node.nodeName == "endSubwayStationNm":
                     global now_arrive_D
-                    now_arrive_D = end_station + " train" + str(arrive_time) + "at arrive"
+                    now_arrive_D = end_station + " train " + str(arrive_time) + " at arrive"
                     print(now_arrive_D)
                     first_2 -= 1
 
@@ -262,10 +262,10 @@ while True:
     # cv2.FONT_HERSHEY_SCRIPT_SIMPLEX : 폰트 형태
     # 1 : 문자열 크기(scale) 소수점 사용가능
     # (0, 255, 0) : 문자열 색상 (r,g,b)
-    cv2.putText(frame, weather_str, (50, 50), 2, 0.5, (255, 255, 255))
-    cv2.putText(frame, mise_str, (50, 80), 2, 0.5, (255, 255, 255))
-    cv2.putText(frame, U_arrive_str, (50, 110), 2, 0.5, (255, 255, 255))
-    cv2.putText(frame, D_arrive_str, (50, 140), 2,0.5, (255, 255, 255))
+    # cv2.putText(frame, weather_str, (50, 50), 2, 0.5, (255, 255, 255))
+    # cv2.putText(frame, mise_str, (50, 80), 2, 0.5, (255, 255, 255))
+    # cv2.putText(frame, U_arrive_str, (50, 110), 2, 0.5, (255, 255, 255))
+    # cv2.putText(frame, D_arrive_str, (50, 140), 2,0.5, (255, 255, 255))
 
 
     cv2.imshow('CAM_Window', frame)
