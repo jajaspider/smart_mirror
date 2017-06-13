@@ -163,6 +163,12 @@ for item in items:
                     print("[미세먼지] 매우나쁨")
                     print('---------------------')
 
+station_code = "PSS222"
+upDownTypeCode = "U"
+global end_station
+if (station_code[3] == "2") & (upDownTypeCode == "U"):
+    end_station = "장산"
+
 apiurl = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=U&dailyTypeCode=01&numOfRows=999"
 dom = minidom.parse(urllib.urlopen(apiurl))
 # 파싱시작
@@ -171,6 +177,7 @@ now = datetime.datetime.now()
 now_time = now.strftime('%H%M%S')
 now_arrive_flag = 0
 first_1 = 1
+
 for item in items:
     for node in item.childNodes:
         if node.nodeName == "arrTime":
@@ -179,9 +186,12 @@ for item in items:
                 now_arrive_flag = 1
         if now_arrive_flag == 1 & first_1 == 1:
             if node.nodeName == "endSubwayStationNm":
-                print(node.childNodes[0].nodeValue + "행 열차가 " + arrive_time + "에 도착 예정입니다.")
+                print(end_station + "행 열차가 " + arrive_time + "에 도착 예정입니다.")
                 first_1 -= 1
 
+upDownTypeCode = "D"
+if (station_code[3] == "2") & (upDownTypeCode == "D"):
+    end_station = "양산"
 apiurl1 = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=D&dailyTypeCode=01&numOfRows=999"
 dom1 = minidom.parse(urllib.urlopen(apiurl1))
 # 파싱시작
@@ -198,6 +208,6 @@ for item in items1:
                 now_arrive_flag = 1
         if now_arrive_flag == 1 & first_2 == 1:
             if node.nodeName == "endSubwayStationNm":
-                print(node.childNodes[0].nodeValue + "행 열차가 " + arrive_time + "에 도착 예정입니다.")
+                print(end_station + "행 열차가 " + arrive_time + "에 도착 예정입니다.")
                 first_2 -= 1
 
