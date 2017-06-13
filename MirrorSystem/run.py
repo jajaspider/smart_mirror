@@ -251,7 +251,10 @@ while True:
     weather_status = weather_parse()
     mise_status = mise_parse()
     metro_parse()
-    str = "현재 날씨 : "+ weather_status +"\n"+"미세먼지 : "+ mise_status +"\n"+ now_arrive_U+"\n"+now_arrive_D
+    weather_str = "현재 날씨 : "+ weather_status
+    mise_str = "미세먼지 : "+ mise_status
+    U_arrive_str = now_arrive_U
+    D_arrive_str = now_arrive_D
     # 카메라에서 이미지 얻기
     ret, frame = cam.read()
     ########### 추가 ##################
@@ -262,7 +265,10 @@ while True:
     # cv2.FONT_HERSHEY_SCRIPT_SIMPLEX : 폰트 형태
     # 1 : 문자열 크기(scale) 소수점 사용가능
     # (0, 255, 0) : 문자열 색상 (r,g,b)
-    cv2.putText(frame, str, (0, 100), 2, 1, (255, 255, 255))
+    cv2.putText(frame, weather_str, (0, 100), 2, 1, (255, 255, 255))
+    cv2.putText(frame, mise_str, (0, 200), 2, 1, (255, 255, 255))
+    cv2.putText(frame, U_arrive_str, (0, 300), 2, 1, (255, 255, 255))
+    cv2.putText(frame, D_arrive_str, (0, 400), 2, 1, (255, 255, 255))
     ###################################
 
     # 얻어온 이미지 윈도우에 표시
