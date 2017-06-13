@@ -6,6 +6,7 @@ import socket
 import datetime
 import math
 from xml.dom import minidom
+import cv2
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -114,103 +115,162 @@ def grid(v1, v2):
     print("[DEBUG] apiurl : " + string)
     return string
 
+def weather_parse():
+    apiurl = grid(float(gps_x), float(gps_y))
+    dom = minidom.parse(urllib.urlopen(apiurl))
+    # 파싱시작
+    items = dom.getElementsByTagName("item")
+    print('---------------------')
+    sky_flag = 0
+    global weather_status
+    for item in items:
+        for node in item.childNodes:
+            if node.nodeName == "category":
+                if node.childNodes[0].nodeValue == "SKY":
+                    sky_flag = 1
+            if sky_flag == 1:
+                if node.nodeName == "fcstValue":
+                    if node.childNodes[0].nodeValue == "1":
+                        weather_status = "맑음"
+                        print("[날씨] 맑음")
+                        print('---------------------')
+                    if node.childNodes[0].nodeValue == "2":
+                        weather_status = "구름조금"
+                        print("[날씨] 구름조금")
+                        print('---------------------')
+                    if node.childNodes[0].nodeValue == "3":
+                        weather_status = "구름많음"
+                        print("[날씨] 구름많음")
+                        print('---------------------')
+                    if node.childNodes[0].nodeValue == "4":
+                        weather_status = "흐림"
+                        print("[날씨] 흐림")
+                        print('---------------------')
 
-ip_parser()
-apiurl = grid(float(gps_x), float(gps_y))
-dom = minidom.parse(urllib.urlopen(apiurl))
-# 파싱시작
-items = dom.getElementsByTagName("item")
-print('---------------------')
-sky_flag = 0
-for item in items:
-    for node in item.childNodes:
-        if node.nodeName == "category":
-            if node.childNodes[0].nodeValue == "SKY":
-                sky_flag = 1
-        if sky_flag == 1:
-            if node.nodeName == "fcstValue":
-                if node.childNodes[0].nodeValue == "1":
-                    print("[날씨] 맑음")
-                    print('---------------------')
-                if node.childNodes[0].nodeValue == "2":
-                    print("[날씨] 구름조금")
-                    print('---------------------')
-                if node.childNodes[0].nodeValue == "3":
-                    print("[날씨] 구름많음")
-                    print('---------------------')
-                if node.childNodes[0].nodeValue == "4":
-                    print("[날씨] 흐림")
-                    print('---------------------')
+def mise_parse():
+    apiurl = "http://opendata.busan.go.kr/openapi/service/AirQualityInfoService/getAirQualityInfoClassifiedByStation?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D"
+    dom = minidom.parse(urllib.urlopen(apiurl))
+    # 파싱시작
+    items = dom.getElemetsByTagName("item")
+    global mise_status
+    for item in items:
+        for node in item.childNodes:
+            if node.nodeName == "pm10Cai":
+                temp_pm10Cai = node.childNodes[0].nodeValue
+            if node.nodeName == "site":
+                if node.childNodes[0].nodeValue == "전포동":
+                    temp_pm10Cai = temp_pm10Cai.strip()
+                    if temp_pm10Cai == "1":
+                        mise_status = "좋음"
+                        
+                        print("[미세먼지] 좋음")
+                        print('---------------------')
+                    if temp_pm10Cai == "2":
+                        mise_status = "보통"
+                        print("[미세먼지] 보통")
+                        print('---------------------')
+                    if temp_pm10Cai == "3":
+                        mise_status = "나쁨"
+                        print("[미세먼지] 나쁨")
+                        print('---------------------')
+                    if temp_pm10Cai == "4":
+                        mise_status = "매우나쁨"
+                        print("[미세먼지] 매우나쁨")
+                        print('---------------------')
 
-apiurl = "http://opendata.busan.go.kr/openapi/service/AirQualityInfoService/getAirQualityInfoClassifiedByStation?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D"
-dom = minidom.parse(urllib.urlopen(apiurl))
-# 파싱시작
-items = dom.getElementsByTagName("item")
-for item in items:
-    for node in item.childNodes:
-        if node.nodeName == "pm10Cai":
-            temp_pm10Cai = node.childNodes[0].nodeValue
-        if node.nodeName == "site":
-            if node.childNodes[0].nodeValue == "전포동":
-                temp_pm10Cai = temp_pm10Cai.strip()
-                if temp_pm10Cai == "1":
-                    print("[미세먼지] 좋음")
-                    print('---------------------')
-                if temp_pm10Cai == "2":
-                    print("[미세먼지] 보통")
-                    print('---------------------')
-                if temp_pm10Cai == "3":
-                    print("[미세먼지] 나쁨")
-                    print('---------------------')
-                if temp_pm10Cai == "4":
-                    print("[미세먼지] 매우나쁨")
-                    print('---------------------')
+def metro_parse():
+    station_code = "PSS222"
+    upDownTypeCode = "U"
+    global end_station
+    if (station_code[3] == "2") & (upDownTypeCode == "U"):
+        end_station = "장산"
 
-station_code = "PSS222"
-upDownTypeCode = "U"
-global end_station
-if (station_code[3] == "2") & (upDownTypeCode == "U"):
-    end_station = "장산"
+    apiurl = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=U&dailyTypeCode=01&numOfRows=999"
+    dom = minidom.parse(urllib.urlopen(apiurl))
+    # 파싱시작
+    items = dom.getElementsByTagName("item")
+    now = datetime.datetime.now()
+    now_time = now.strftime('%H%M%S')
+    now_arrive_flag = 0
+    first_1 = 1
 
-apiurl = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=U&dailyTypeCode=01&numOfRows=999"
-dom = minidom.parse(urllib.urlopen(apiurl))
-# 파싱시작
-items = dom.getElementsByTagName("item")
-now = datetime.datetime.now()
-now_time = now.strftime('%H%M%S')
-now_arrive_flag = 0
-first_1 = 1
+    for item in items:
+        for node in item.childNodes:
+            if node.nodeName == "arrTime":
+                if now_time < node.childNodes[0].nodeValue:
+                    arrive_time = node.childNodes[0].nodeValue
+                    now_arrive_flag = 1
+            if now_arrive_flag == 1 & first_1 == 1:
+                if node.nodeName == "endSubwayStationNm":
+                    global now_arrive_U
+                    now_arrive_U = end_station + "행 열차가 " + str(arrive_time) + "에 도착 예정입니다."
+                    print(now_arrive_U)
+                    first_1 -= 1
 
-for item in items:
-    for node in item.childNodes:
-        if node.nodeName == "arrTime":
-            if now_time < node.childNodes[0].nodeValue:
-                arrive_time = node.childNodes[0].nodeValue
-                now_arrive_flag = 1
-        if now_arrive_flag == 1 & first_1 == 1:
-            if node.nodeName == "endSubwayStationNm":
-                print(end_station + "행 열차가 " + str(arrive_time) + "에 도착 예정입니다.")
-                first_1 -= 1
+    upDownTypeCode = "D"
+    if (station_code[3] == "2") & (upDownTypeCode == "D"):
+        end_station = "양산"
+    apiurl1 = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=D&dailyTypeCode=01&numOfRows=999"
+    dom1 = minidom.parse(urllib.urlopen(apiurl1))
+    # 파싱시작
+    items1 = dom1.getElementsByTagName("item")
+    now1 = datetime.datetime.now()
+    now_time1 = now1.strftime('%H%M%S')
+    now_arrive_flag = 0
+    first_2 = 1
+    for item in items1:
+        for node in item.childNodes:
+            if node.nodeName == "arrTime":
+                if now_time1 < node.childNodes[0].nodeValue:
+                    arrive_time = node.childNodes[0].nodeValue
+                    now_arrive_flag = 1
+            if now_arrive_flag == 1 & first_2 == 1:
+                if node.nodeName == "endSubwayStationNm":
+                    global now_arrive_D
+                    now_arrive_D = end_station + "행 열차가 " + str(arrive_time) + "에 도착 예정입니다."
+                    print(now_arrive_D)
+                    first_2 -= 1
 
-upDownTypeCode = "D"
-if (station_code[3] == "2") & (upDownTypeCode == "D"):
-    end_station = "양산"
-apiurl1 = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=D&dailyTypeCode=01&numOfRows=999"
-dom1 = minidom.parse(urllib.urlopen(apiurl1))
-# 파싱시작
-items1 = dom1.getElementsByTagName("item")
-now1 = datetime.datetime.now()
-now_time1 = now1.strftime('%H%M%S')
-now_arrive_flag = 0
-first_2 = 1
-for item in items1:
-    for node in item.childNodes:
-        if node.nodeName == "arrTime":
-            if now_time1 < node.childNodes[0].nodeValue:
-                arrive_time = node.childNodes[0].nodeValue
-                now_arrive_flag = 1
-        if now_arrive_flag == 1 & first_2 == 1:
-            if node.nodeName == "endSubwayStationNm":
-                print(end_station + "행 열차가 " + str(arrive_time) + "에 도착 예정입니다.")
-                first_2 -= 1
 
+CAM_ID = 0
+
+cam = cv2.VideoCapture(CAM_ID)  # 카메라 생성
+if cam.isOpened() == False:  # 카메라 생성 확인
+    print
+    "Can't open the CAM(%d)" % (CAM_ID)
+    exit()
+
+# 윈도우 생성 및 사이즈 변경
+cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
+cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
+########### 추가 ##################
+# 문자열 저장
+###################################
+while True:
+    ip_parser()
+    weather_parse()
+    mise_parse()
+    metro_parse()
+    str = "현재 날씨 : "+ weather_status +"\n"+"미세먼지 : "+ mise_status +"\n"+ now_arrive_U+"\n"+now_arrive_D
+    # 카메라에서 이미지 얻기
+    ret, frame = cam.read()
+    ########### 추가 ##################
+    # frame이라는 이미지에 글씨 넣는 함수
+    # frame : 카메라 이미지
+    # str : 문자열 변수
+    # (0, 100) : 문자열이 표시될 좌표 x = 0, y = 100
+    # cv2.FONT_HERSHEY_SCRIPT_SIMPLEX : 폰트 형태
+    # 1 : 문자열 크기(scale) 소수점 사용가능
+    # (0, 255, 0) : 문자열 색상 (r,g,b)
+    cv2.putText(frame, str, (0, 100), 2, 1, (255, 255, 255))
+    ###################################
+
+    # 얻어온 이미지 윈도우에 표시
+    cv2.imshow('CAM_Window', frame)
+    # 10ms 동안 키입력 대기
+    if cv2.waitKey(10) >= 0:
+        continue
+
+# 윈도우 종려
+cam.release()
+cv2.destroyWindow('CAM_Window')
