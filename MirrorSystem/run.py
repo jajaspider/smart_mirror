@@ -48,6 +48,7 @@ def ip_parser():
 
     print("[DEBUG] gps_x : " + gps_x)
     print("[DEBUG] gps_y : " + gps_y)
+    #
 
 
 def grid(v1, v2):
@@ -203,7 +204,7 @@ def metro_parse():
             if now_arrive_flag == 1 & first_1 == 1:
                 if node.nodeName == "endSubwayStationNm":
                     global now_arrive_U
-                    now_arrive_U = end_station + " train" + str(arrive_time) + "at arrive"
+                    now_arrive_U = end_station + " train " + str(arrive_time) + " at arrive"
                     print(now_arrive_U)
                     first_1 -= 1
 
