@@ -152,7 +152,7 @@ def mise_parse():
     apiurl = "http://opendata.busan.go.kr/openapi/service/AirQualityInfoService/getAirQualityInfoClassifiedByStation?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D"
     dom = minidom.parse(urllib.urlopen(apiurl))
     # 파싱시작
-    items = dom.getElemetsByTagName("item")
+    items = dom.getElementsByTagName("item")
     for item in items:
         for node in item.childNodes:
             if node.nodeName == "pm10Cai":
