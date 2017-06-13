@@ -271,6 +271,7 @@ def integrated():
 CAM_ID = 0
 
 
+
 cam = cv2.VideoCapture(CAM_ID)
 if cam.isOpened() == False:
     print
@@ -279,8 +280,27 @@ if cam.isOpened() == False:
 
 cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
+ip_parser()
+weather_status = weather_parse()
+mise_status = mise_parse()
+metro_parse()
+scheduleRows = smdb.getSchedule()
+schedule_str = "Schedule Time : " + str(scheduleRows[0]['schedule_time']) + "Subject : " + str(scheduleRows[0]['subject'])
+weather_str = "Weather : " + weather_status
+mise_str = "Fine Dust : " + mise_status
+U_arrive_str = now_arrive_U
+D_arrive_str = now_arrive_D
+tempData = smdb.getTemp()
+min_temp = tempData[0]['min_temp']
+max_temp = tempData[0]['max_temp']
+now_temp = DHT22.getNowTemp()
+if now_temp > max_temp:
+    # 에어컨 켜기
+    os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_18")
+elif now_temp < min_temp:
+    # 에어컨 끄기
+    os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_OFF")
 
-integrated()
 th = threading.Thread(target=integrated)
 th.start()
 th.join()
