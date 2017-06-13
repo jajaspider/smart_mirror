@@ -148,7 +148,7 @@ for item in items:
         if node.nodeName == "pm10Cai":
             temp_pm10Cai = node.childNodes[0].nodeValue
         if node.nodeName == "site":
-            if str(node.childNodes[0].nodeValue) == "전포동":
+            if node.childNodes[0].nodeValue == "전포동".encode('utf-8'):
                 temp_pm10Cai = temp_pm10Cai.strip()
                 if temp_pm10Cai == "1":
                     print("[미세먼지] 좋음")
