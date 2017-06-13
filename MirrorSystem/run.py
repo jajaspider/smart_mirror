@@ -131,19 +131,19 @@ def weather_parse():
             if sky_flag == 1:
                 if node.nodeName == "fcstValue":
                     if node.childNodes[0].nodeValue == "1":
-                        weather_status = "맑음"
+                        weather_status = "clear"
                         print("[날씨] 맑음")
                         print('---------------------')
                     if node.childNodes[0].nodeValue == "2":
-                        weather_status = "구름조금"
+                        weather_status = "little cloud"
                         print("[날씨] 구름조금")
                         print('---------------------')
                     if node.childNodes[0].nodeValue == "3":
-                        weather_status = "구름많음"
+                        weather_status = "many cloud"
                         print("[날씨] 구름많음")
                         print('---------------------')
                     if node.childNodes[0].nodeValue == "4":
-                        weather_status = "흐림"
+                        weather_status = "cloudy"
                         print("[날씨] 흐림")
                         print('---------------------')
     return weather_status
@@ -161,19 +161,19 @@ def mise_parse():
                 if node.childNodes[0].nodeValue == "전포동":
                     temp_pm10Cai = temp_pm10Cai.strip()
                     if temp_pm10Cai == "1":
-                        mise_status = "좋음"
+                        mise_status = "good"
                         print("[미세먼지] 좋음")
                         print('---------------------')
                     if temp_pm10Cai == "2":
-                        mise_status = "보통"
+                        mise_status = "so so"
                         print("[미세먼지] 보통")
                         print('---------------------')
                     if temp_pm10Cai == "3":
-                        mise_status = "나쁨"
+                        mise_status = "bad"
                         print("[미세먼지] 나쁨")
                         print('---------------------')
                     if temp_pm10Cai == "4":
-                        mise_status = "매우나쁨"
+                        mise_status = "very bad"
                         print("[미세먼지] 매우나쁨")
                         print('---------------------')
     return mise_status
@@ -241,17 +241,17 @@ if cam.isOpened() == False:  # 카메라 생성 확인
     exit()
 
 # 윈도우 생성 및 사이즈 변경
-cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
-cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
 ########### 추가 ##################
 # 문자열 저장
 ###################################
 while True:
+    cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
     ip_parser()
     weather_status = weather_parse()
     mise_status = mise_parse()
     metro_parse()
-    weather_str = "현재 날씨 : "+ weather_status
+    weather_str = "Weather : "+ weather_status
     mise_str = "미세먼지 : "+ mise_status
     U_arrive_str = now_arrive_U
     D_arrive_str = now_arrive_D
@@ -274,7 +274,8 @@ while True:
     # 얻어온 이미지 윈도우에 표시
     cv2.imshow('CAM_Window', frame)
     # 10ms 동안 키입력 대기
-    if cv2.waitKey(10) >= 0:
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        cv2.destroyWindow('CAM_Window')
         continue
 
 # 윈도우 종려
