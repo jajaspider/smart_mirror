@@ -127,28 +127,26 @@ for item in items:
                     print("흐림")
                     print('---------------------')
 
-apiurl1 = "http://opendata.busan.go.kr/openapi/service/AirQualityInfoService/getAirQualityInfoClassifiedByStation?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D"
+apiurl = "http://opendata.busan.go.kr/openapi/service/AirQualityInfoService/getAirQualityInfoClassifiedByStation?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D"
 dom = minidom.parse(urllib.request.urlopen(apiurl))
 # 파싱시작
 items = dom.getElementsByTagName("item")
-print('---------------------')
-sky_flag = 0
 for item in items:
     for node in item.childNodes:
-        if node.nodeName == "category":
-            if node.childNodes[0].nodeValue == "SKY":
-                sky_flag = 1
-        if sky_flag == 1:
-            if node.nodeName == "fcstValue":
-                if node.childNodes[0].nodeValue == "1":
-                    print("맑음")
+        if node.nodeName == "pm10Cai":
+            temp_pm10Cai = node.childNodes[0].nodeValue
+        if node.nodeName == "site":
+            if node.childNodes[0].nodeValue == "전포동":
+                temp_pm10Cai = temp_pm10Cai.strip()
+                if temp_pm10Cai == "1":
+                    print("좋음")
                     print('---------------------')
-                if node.childNodes[0].nodeValue == "2":
-                    print("구름조금")
+                if temp_pm10Cai == "2":
+                    print("보통")
                     print('---------------------')
-                if node.childNodes[0].nodeValue == "3":
-                    print("구름많음")
+                if temp_pm10Cai == "3":
+                    print("나쁨")
                     print('---------------------')
-                if node.childNodes[0].nodeValue == "4":
-                    print("흐림")
+                if temp_pm10Cai == "4":
+                    print("매우나쁨")
                     print('---------------------')
