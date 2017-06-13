@@ -241,12 +241,12 @@ if cam.isOpened() == False:  # 카메라 생성 확인
     exit()
 
 # 윈도우 생성 및 사이즈 변경
+cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
+cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
 ########### 추가 ##################
 # 문자열 저장
 ###################################
 while True:
-    cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
-    cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
     ip_parser()
     weather_status = weather_parse()
     mise_status = mise_parse()
@@ -274,9 +274,9 @@ while True:
     # 얻어온 이미지 윈도우에 표시
     cv2.imshow('CAM_Window', frame)
     # 10ms 동안 키입력 대기
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        cv2.destroyWindow('CAM_Window')
-        continue
+    if cv2.waitKey(1)>=0:
+        #cv2.destroyWindow('CAM_Window')
+        break
 
 # 윈도우 종려
 cam.release()
