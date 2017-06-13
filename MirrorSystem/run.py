@@ -245,6 +245,7 @@ def integrated():
     global mise_str
     global U_arrive_str
     global D_arrive_str
+    global now_temp
     ip_parser()
     weather_status = weather_parse()
     mise_status = mise_parse()
@@ -285,7 +286,7 @@ weather_status = weather_parse()
 mise_status = mise_parse()
 metro_parse()
 scheduleRows = smdb.getSchedule()
-schedule_str = "Schedule Time : " + str(scheduleRows[0]['schedule_time']) + "Subject : " + str(scheduleRows[0]['subject'])
+schedule_str = "Schedule Time : " + str(scheduleRows[0]['schedule_time']) + " Subject : " + str(scheduleRows[0]['subject'])
 weather_str = "Weather : " + weather_status
 mise_str = "Fine Dust : " + mise_status
 U_arrive_str = now_arrive_U
@@ -320,6 +321,7 @@ while True:
     cv2.putText(frame, U_arrive_str, (50, 110), 2, 0.5, (255, 255, 255))
     cv2.putText(frame, D_arrive_str, (50, 140), 2,0.5, (255, 255, 255))
     cv2.putText(frame, schedule_str, (50, 170), 2, 0.5, (255, 255, 255))
+    cv2.putText(frame, now_temp, (50, 200), 2, 0.5, (255, 255, 255))
 
     cv2.imshow('CAM_Window', frame)
     # 10ms 동안 키입력 대기
