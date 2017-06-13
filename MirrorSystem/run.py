@@ -334,6 +334,7 @@ th2 = threading.Thread(target=opencv_view)
 th2.start()
 th2.join()
 th1 = threading.Thread(target=integrated)
+th1.daemon = True
 th1.start()
 th1.join()
 
