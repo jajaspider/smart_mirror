@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import cv2
 
@@ -6,7 +6,7 @@ CAM_ID = 0
 
 cam = cv2.VideoCapture(CAM_ID) #카메라 생성
 if cam.isOpened() == False: #카메라 생성 확인
-    print("Can't open the CAM(%d)" % (CAM_ID))
+    print"Can't open the CAM(%d)" % (CAM_ID)
     exit()
 
 #윈도우 생성 및 사이즈 변경
