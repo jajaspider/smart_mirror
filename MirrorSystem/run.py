@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import urllib.request
+import urllib
 import socket
 import datetime
 import math
