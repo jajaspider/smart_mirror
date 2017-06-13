@@ -183,7 +183,7 @@ def metro_parse():
     upDownTypeCode = "U"
     global end_station
     if (station_code[3] == "2") & (upDownTypeCode == "U"):
-        end_station = "장산"
+        end_station = "JangSan"
 
     apiurl = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=U&dailyTypeCode=01&numOfRows=999"
     dom = minidom.parse(urllib.urlopen(apiurl))
@@ -209,7 +209,7 @@ def metro_parse():
 
     upDownTypeCode = "D"
     if (station_code[3] == "2") & (upDownTypeCode == "D"):
-        end_station = "양산"
+        end_station = "YangSan"
     apiurl1 = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=D&dailyTypeCode=01&numOfRows=999"
     dom1 = minidom.parse(urllib.urlopen(apiurl1))
     # 파싱시작
@@ -262,11 +262,10 @@ while True:
     # cv2.FONT_HERSHEY_SCRIPT_SIMPLEX : 폰트 형태
     # 1 : 문자열 크기(scale) 소수점 사용가능
     # (0, 255, 0) : 문자열 색상 (r,g,b)
-    # cv2.putText(frame, weather_str, (50, 50), 2, 0.5, (255, 255, 255))
-    # cv2.putText(frame, mise_str, (50, 80), 2, 0.5, (255, 255, 255))
-    # cv2.putText(frame, U_arrive_str, (50, 110), 2, 0.5, (255, 255, 255))
-    # cv2.putText(frame, D_arrive_str, (50, 140), 2,0.5, (255, 255, 255))
-
+    cv2.putText(frame, weather_str, (50, 50), 2, 0.5, (255, 255, 255))
+    cv2.putText(frame, mise_str, (50, 80), 2, 0.5, (255, 255, 255))
+    cv2.putText(frame, U_arrive_str, (50, 110), 2, 0.5, (255, 255, 255))
+    cv2.putText(frame, D_arrive_str, (50, 140), 2,0.5, (255, 255, 255))
 
     cv2.imshow('CAM_Window', frame)
     # 10ms 동안 키입력 대기
