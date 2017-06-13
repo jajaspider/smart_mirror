@@ -122,7 +122,7 @@ def weather_parse():
     items = dom.getElementsByTagName("item")
     print('---------------------')
     sky_flag = 0
-    global weather_status
+
     for item in items:
         for node in item.childNodes:
             if node.nodeName == "category":
@@ -146,13 +146,13 @@ def weather_parse():
                         weather_status = "흐림"
                         print("[날씨] 흐림")
                         print('---------------------')
+    return weather_status
 
 def mise_parse():
     apiurl = "http://opendata.busan.go.kr/openapi/service/AirQualityInfoService/getAirQualityInfoClassifiedByStation?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D"
     dom = minidom.parse(urllib.urlopen(apiurl))
     # 파싱시작
     items = dom.getElemetsByTagName("item")
-    global mise_status
     for item in items:
         for node in item.childNodes:
             if node.nodeName == "pm10Cai":
@@ -162,7 +162,6 @@ def mise_parse():
                     temp_pm10Cai = temp_pm10Cai.strip()
                     if temp_pm10Cai == "1":
                         mise_status = "좋음"
-                        
                         print("[미세먼지] 좋음")
                         print('---------------------')
                     if temp_pm10Cai == "2":
@@ -177,6 +176,7 @@ def mise_parse():
                         mise_status = "매우나쁨"
                         print("[미세먼지] 매우나쁨")
                         print('---------------------')
+    return mise_status
 
 def metro_parse():
     station_code = "PSS222"
@@ -248,8 +248,8 @@ cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FU
 ###################################
 while True:
     ip_parser()
-    weather_parse()
-    mise_parse()
+    weather_status = weather_parse()
+    mise_status = mise_parse()
     metro_parse()
     str = "현재 날씨 : "+ weather_status +"\n"+"미세먼지 : "+ mise_status +"\n"+ now_arrive_U+"\n"+now_arrive_D
     # 카메라에서 이미지 얻기
