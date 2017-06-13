@@ -266,8 +266,7 @@ def integrated():
     elif now_temp < min_temp:
         # 에어컨 끄기
         os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_OFF")
-
-    time.sleep(60)
+    time.sleep(10)
 
 
 def opencv_view(cam):
