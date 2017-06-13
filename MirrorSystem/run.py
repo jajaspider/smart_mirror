@@ -234,8 +234,8 @@ def metro_parse():
 
 CAM_ID = 0
 
-cam = cv2.VideoCapture(CAM_ID)  # 카메라 생성
-if cam.isOpened() == False:  # 카메라 생성 확인
+cam = cv2.VideoCapture(CAM_ID)
+if cam.isOpened() == False:
     print
     "Can't open the CAM(%d)" % (CAM_ID)
     exit()
@@ -243,16 +243,16 @@ if cam.isOpened() == False:  # 카메라 생성 확인
 cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
 
-while True:
-    ip_parser()
-    weather_status = weather_parse()
-    mise_status = mise_parse()
-    metro_parse()
-    weather_str = "Weather : "+ weather_status
-    mise_str = "Fine Dust : "+ mise_status
-    U_arrive_str = now_arrive_U
-    D_arrive_str = now_arrive_D
+ip_parser()
+weather_status = weather_parse()
+mise_status = mise_parse()
+metro_parse()
+weather_str = "Weather : "+ weather_status
+mise_str = "Fine Dust : "+ mise_status
+U_arrive_str = now_arrive_U
+D_arrive_str = now_arrive_D
 
+while True:
     ret, frame = cam.read()
     ########### 추가 ##################
     # frame이라는 이미지에 글씨 넣는 함수
