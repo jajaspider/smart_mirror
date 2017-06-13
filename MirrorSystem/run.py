@@ -11,7 +11,7 @@ servicekey = "4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZ
 
 def get_ip():
     url = 'http://checkmyip.com'
-    readurl = urllib.request.urlopen(url).read()
+    readurl = urllib.urlopen(url).read()
     readurl = readurl.decode('utf-8')
     splitresult = readurl.split('\n')
     for result in splitresult:
@@ -26,7 +26,7 @@ def ip_parser():
     ip = get_ip()
     try:
         input_url = "http://ip-api.com/line/" + ip
-        readurl = urllib.request.urlopen(input_url).read()
+        readurl = urllib.urlopen(input_url).read()
     except:
         print(input_url + " url 접속 에러")
         exit(0)
@@ -114,7 +114,7 @@ def grid(v1, v2):
 
 ip_parser()
 apiurl = grid(float(gps_x), float(gps_y))
-dom = minidom.parse(urllib.request.urlopen(apiurl))
+dom = minidom.parse(urllib.urlopen(apiurl))
 # 파싱시작
 items = dom.getElementsByTagName("item")
 print('---------------------')
@@ -140,7 +140,7 @@ for item in items:
                     print('---------------------')
 
 apiurl = "http://opendata.busan.go.kr/openapi/service/AirQualityInfoService/getAirQualityInfoClassifiedByStation?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D"
-dom = minidom.parse(urllib.request.urlopen(apiurl))
+dom = minidom.parse(urllib.urlopen(apiurl))
 # 파싱시작
 items = dom.getElementsByTagName("item")
 for item in items:
@@ -164,7 +164,7 @@ for item in items:
                     print('---------------------')
 
 apiurl = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=U&dailyTypeCode=01&numOfRows=999"
-dom = minidom.parse(urllib.request.urlopen(apiurl))
+dom = minidom.parse(urllib.urlopen(apiurl))
 # 파싱시작
 items = dom.getElementsByTagName("item")
 now = datetime.datetime.now()
@@ -183,7 +183,7 @@ for item in items:
                 first_1 -= 1
 
 apiurl1 = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=D&dailyTypeCode=01&numOfRows=999"
-dom1 = minidom.parse(urllib.request.urlopen(apiurl1))
+dom1 = minidom.parse(urllib.urlopen(apiurl1))
 # 파싱시작
 items1 = dom1.getElementsByTagName("item")
 now1 = datetime.datetime.now()
