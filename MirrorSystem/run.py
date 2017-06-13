@@ -4,14 +4,23 @@ import datetime
 import math
 from xml.dom import minidom
 
-hostName = socket.gethostname()
-ip = socket.gethostbyname(hostName)
 servicekey = "4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D"
 
+def get_ip():
+    url = 'http://checkmyip.com'
+    readurl = urllib.request.urlopen(url).read()
+    readurl = readurl.decode('utf-8')
+    splitresult = readurl.split('\n')
+    for result in splitresult:
+        if result.find('Your IP is') > 0:
+            ip = result.split('primary">')
+            ip_1 = ip[1].split('</span>')
+    return ip_1[0]
 
 def ip_parser():
     global gps_x
     global gps_y
+    ip = get_ip()
     try:
         input_url = "http://ip-api.com/line/" + ip
         readurl = urllib.request.urlopen(input_url).read()
@@ -188,3 +197,4 @@ for item in items1:
             if node.nodeName == "endSubwayStationNm":
                 print(node.childNodes[0].nodeValue + "행 열차가 " + arrive_time + "에 도착 예정입니다.")
                 first_2 -= 1
+
