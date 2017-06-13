@@ -1,9 +1,8 @@
 <?php
-    $current_time = date("Y-m-j H:i:s");
     $connect = mysqli_connect("localhost:3306", "root", "flvmfptl1", "smartmirror");
     mysqli_set_charset($connect, "utf8");
 
-    $selectSQL = "select * from schedule where schedule_time >= '$current_time'";
+    $selectSQL = "select * from schedule where date(schedule_time) = date(now())";
     $selectResult = mysqli_query($connect, $selectSQL);
 
     $selectRowCount = mysqli_num_rows($selectResult);

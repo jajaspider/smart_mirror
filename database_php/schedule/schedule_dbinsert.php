@@ -1,8 +1,8 @@
 <?php
-    $p_date = $_POST["p_date"];
+    $p_date = $_POST["p_date"] . ":00";
     $p_subject = $_POST["p_subject"];
-    echo $p_date;
-    echo $p_subject;
+
+    $p_date = str_replace("T", " ", $p_date);
 
     //database :: smartmirror
     //table :: schedule(_id[int], schedule_time[datetime], subject[varchar(200)] )
@@ -10,10 +10,11 @@
     mysqli_set_charset($connect, "utf8");
 
     $insertSQL = "insert into schedule values(NULL, '$p_date', '$p_subject')";
+    echo $insertSQL;
     $insertQuery = mysqli_query($connect, $insertSQL);
 
     if($insertQuery)
-        echo "데이터 입력 완료";
+        echo "데이터 입력 성공";
     else
         echo "데이터 입력 실패";
 
