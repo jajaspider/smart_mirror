@@ -208,6 +208,6 @@ for item in items1:
                 now_arrive_flag = 1
         if now_arrive_flag == 1 & first_2 == 1:
             if node.nodeName == "endSubwayStationNm":
-                print(end_station + "행 열차가 " + arrive_time + "에 도착 예정입니다.")
+                print(end_station + "행 열차가 " + str(arrive_time) + "에 도착 예정입니다.")
                 first_2 -= 1
 
