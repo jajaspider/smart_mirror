@@ -269,18 +269,45 @@ def integrated():
 
     time.sleep(60)
 
-CAM_ID = 0
+
+def opencv_view():
+    CAM_ID = 0
+    cam = cv2.VideoCapture(CAM_ID)
+    if cam.isOpened() == False:
+        print
+        "Can't open the CAM(%d)" % (CAM_ID)
+        exit()
+
+    cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
+    while True:
+        ret, frame = cam.read()
+        ########### 추가 ##################
+        # frame이라는 이미지에 글씨 넣는 함수
+        # frame : 카메라 이미지
+        # str : 문자열 변수
+        # (0, 100) : 문자열이 표시될 좌표 x = 0, y = 100
+        # cv2.FONT_HERSHEY_SCRIPT_SIMPLEX : 폰트 형태
+        # 1 : 문자열 크기(scale) 소수점 사용가능
+        # (0, 255, 0) : 문자열 색상 (r,g,b)
+        cv2.putText(frame, weather_str, (50, 50), 2, 0.5, (255, 255, 255))
+        cv2.putText(frame, mise_str, (50, 80), 2, 0.5, (255, 255, 255))
+        cv2.putText(frame, U_arrive_str, (50, 110), 2, 0.5, (255, 255, 255))
+        cv2.putText(frame, D_arrive_str, (50, 140), 2, 0.5, (255, 255, 255))
+        cv2.putText(frame, schedule_str, (50, 170), 2, 0.5, (255, 255, 255))
+        cv2.putText(frame, now_temp, (50, 200), 2, 0.5, (255, 255, 255))
+
+        cv2.imshow('CAM_Window', frame)
+        # 10ms 동안 키입력 대기
+        if cv2.waitKey(10) >= 0:
+            # cv2.destroyWindow('CAM_Window')
+            break
+    cam.release()
+    cv2.destroyWindow('CAM_Window')
 
 
 
-cam = cv2.VideoCapture(CAM_ID)
-if cam.isOpened() == False:
-    print
-    "Can't open the CAM(%d)" % (CAM_ID)
-    exit()
 
-cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
-cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
 ip_parser()
 weather_status = weather_parse()
 mise_status = mise_parse()
@@ -302,32 +329,12 @@ elif now_temp < min_temp:
     # 에어컨 끄기
     os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_OFF")
 
-th = threading.Thread(target=integrated)
-th.start()
-th.join()
+th1 = threading.Thread(target=integrated)
+th1.start()
+th1.join()
+th2 = threading.Thread(target=opencv_view)
+th2.start()
+th2.join()
 
-while True:
-    ret, frame = cam.read()
-    ########### 추가 ##################
-    # frame이라는 이미지에 글씨 넣는 함수
-    # frame : 카메라 이미지
-    # str : 문자열 변수
-    # (0, 100) : 문자열이 표시될 좌표 x = 0, y = 100
-    # cv2.FONT_HERSHEY_SCRIPT_SIMPLEX : 폰트 형태
-    # 1 : 문자열 크기(scale) 소수점 사용가능
-    # (0, 255, 0) : 문자열 색상 (r,g,b)
-    cv2.putText(frame, weather_str, (50, 50), 2, 0.5, (255, 255, 255))
-    cv2.putText(frame, mise_str, (50, 80), 2, 0.5, (255, 255, 255))
-    cv2.putText(frame, U_arrive_str, (50, 110), 2, 0.5, (255, 255, 255))
-    cv2.putText(frame, D_arrive_str, (50, 140), 2,0.5, (255, 255, 255))
-    cv2.putText(frame, schedule_str, (50, 170), 2, 0.5, (255, 255, 255))
-    cv2.putText(frame, now_temp, (50, 200), 2, 0.5, (255, 255, 255))
 
-    cv2.imshow('CAM_Window', frame)
-    # 10ms 동안 키입력 대기
-    if cv2.waitKey(10) >= 0:
-        #cv2.destroyWindow('CAM_Window')
-        break
 
-cam.release()
-cv2.destroyWindow('CAM_Window')
