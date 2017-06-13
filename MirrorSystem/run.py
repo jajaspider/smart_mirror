@@ -115,16 +115,16 @@ for item in items:
         if sky_flag == 1:
             if node.nodeName == "fcstValue":
                 if node.childNodes[0].nodeValue == "1":
-                    print("맑음")
+                    print("[날씨] 맑음")
                     print('---------------------')
                 if node.childNodes[0].nodeValue == "2":
-                    print("구름조금")
+                    print("[날씨] 구름조금")
                     print('---------------------')
                 if node.childNodes[0].nodeValue == "3":
-                    print("구름많음")
+                    print("[날씨] 구름많음")
                     print('---------------------')
                 if node.childNodes[0].nodeValue == "4":
-                    print("흐림")
+                    print("[날씨] 흐림")
                     print('---------------------')
 
 apiurl = "http://opendata.busan.go.kr/openapi/service/AirQualityInfoService/getAirQualityInfoClassifiedByStation?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D"
@@ -139,14 +139,52 @@ for item in items:
             if node.childNodes[0].nodeValue == "전포동":
                 temp_pm10Cai = temp_pm10Cai.strip()
                 if temp_pm10Cai == "1":
-                    print("좋음")
+                    print("[미세먼지] 좋음")
                     print('---------------------')
                 if temp_pm10Cai == "2":
-                    print("보통")
+                    print("[미세먼지] 보통")
                     print('---------------------')
                 if temp_pm10Cai == "3":
-                    print("나쁨")
+                    print("[미세먼지] 나쁨")
                     print('---------------------')
                 if temp_pm10Cai == "4":
-                    print("매우나쁨")
+                    print("[미세먼지] 매우나쁨")
                     print('---------------------')
+
+apiurl = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=U&dailyTypeCode=01&numOfRows=999"
+dom = minidom.parse(urllib.request.urlopen(apiurl))
+# 파싱시작
+items = dom.getElementsByTagName("item")
+now = datetime.datetime.now()
+now_time = now.strftime('%H%M%S')
+now_arrive_flag = 0
+first_1 = 1
+for item in items:
+    for node in item.childNodes:
+        if node.nodeName == "arrTime":
+            if now_time < node.childNodes[0].nodeValue:
+                arrive_time = node.childNodes[0].nodeValue
+                now_arrive_flag = 1
+        if now_arrive_flag == 1 & first_1 == 1:
+            if node.nodeName == "endSubwayStationNm":
+                print(node.childNodes[0].nodeValue + "행 열차가 " + arrive_time + "에 도착 예정입니다.")
+                first_1 -= 1
+
+apiurl1 = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getSubwaySttnAcctoSchdulList?ServiceKey=4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D&subwayStationId=PSS222&upDownTypeCode=D&dailyTypeCode=01&numOfRows=999"
+dom1 = minidom.parse(urllib.request.urlopen(apiurl1))
+# 파싱시작
+items1 = dom1.getElementsByTagName("item")
+now1 = datetime.datetime.now()
+now_time1 = now1.strftime('%H%M%S')
+now_arrive_flag = 0
+first_2 = 1
+for item in items1:
+    for node in item.childNodes:
+        if node.nodeName == "arrTime":
+            if now_time1 < node.childNodes[0].nodeValue:
+                arrive_time = node.childNodes[0].nodeValue
+                now_arrive_flag = 1
+        if now_arrive_flag == 1 & first_2 == 1:
+            if node.nodeName == "endSubwayStationNm":
+                print(node.childNodes[0].nodeValue + "행 열차가 " + arrive_time + "에 도착 예정입니다.")
+                first_2 -= 1

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MirrorSystem.iml" filepath="$PROJECT_DIR$/.idea/MirrorSystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../.idea/smart_mirror.iml" filepath="$PROJECT_DIR$/../.idea/smart_mirror.iml" />
     </modules>
   </component>
 </project>
