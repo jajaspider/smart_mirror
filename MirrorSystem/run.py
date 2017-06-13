@@ -252,7 +252,7 @@ while True:
     mise_status = mise_parse()
     metro_parse()
     weather_str = "Weather : "+ weather_status
-    mise_str = "미세먼지 : "+ mise_status
+    mise_str = "Fine Dust : "+ mise_status
     U_arrive_str = now_arrive_U
     D_arrive_str = now_arrive_D
     # 카메라에서 이미지 얻기
