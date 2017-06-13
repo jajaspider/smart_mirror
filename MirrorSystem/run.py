@@ -3,6 +3,8 @@
 
 import urllib
 import socket
+import os
+import time
 import datetime
 import math
 from xml.dom import minidom
@@ -237,8 +239,37 @@ def metro_parse():
                     print(now_arrive_D)
                     first_2 -= 1
 
+def integrated():
+    global schedule_str
+    global weather_str
+    global mise_str
+    global U_arrive_str
+    global D_arrive_str
+    ip_parser()
+    weather_status = weather_parse()
+    mise_status = mise_parse()
+    metro_parse()
+    scheduleRows = smdb.getSchedule()
+    schedule_str = "Schedule Time : " + scheduleRows[0]['schedule_time'] + "Subject : " + scheduleRows[0]['subject']
+    weather_str = "Weather : " + weather_status
+    mise_str = "Fine Dust : " + mise_status
+    U_arrive_str = now_arrive_U
+    D_arrive_str = now_arrive_D
+    tempData = smdb.getTemp()
+    min_temp = tempData[0]['min_temp']
+    max_temp = tempData[0]['max_temp']
+    now_temp = DHT22.getNowTemp()
+    if now_temp > max_temp:
+        # 에어컨 켜기
+        os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_18")
+    elif now_temp < min_temp:
+        # 에어컨 끄기
+        os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_OFF")
+
+    time.sleep(60)
 
 CAM_ID = 0
+
 
 cam = cv2.VideoCapture(CAM_ID)
 if cam.isOpened() == False:
@@ -249,26 +280,9 @@ if cam.isOpened() == False:
 cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
 
-ip_parser()
-weather_status = weather_parse()
-mise_status = mise_parse()
-metro_parse()
-scheduleRows = smdb.getSchedule()
-schedule_str = "Schedule Time : "+scheduleRows[0]['schedule_time'] + "Subject : "+ scheduleRows[0]['subject']
-weather_str = "Weather : "+ weather_status
-mise_str = "Fine Dust : "+ mise_status
-U_arrive_str = now_arrive_U
-D_arrive_str = now_arrive_D
-tempData = smdb.getTemp()
-min_temp = tempData[0]['min_temp']
-max_temp = tempData[0]['max_temp']
-now_temp = DHT22.getNowTemp()
-if now_temp > max_temp :
-	#에어컨 켜기
-	os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_18")
-elif now_temp < min_temp :
-	#에어컨 끄기
-	os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_OFF")
+th = threading.Thread(target=integrated)
+th.start()
+th.join()
 
 while True:
     ret, frame = cam.read()
@@ -284,6 +298,7 @@ while True:
     cv2.putText(frame, mise_str, (50, 80), 2, 0.5, (255, 255, 255))
     cv2.putText(frame, U_arrive_str, (50, 110), 2, 0.5, (255, 255, 255))
     cv2.putText(frame, D_arrive_str, (50, 140), 2,0.5, (255, 255, 255))
+    cv2.putText(frame, schedule_str, (50, 170), 2, 0.5, (255, 255, 255))
 
     cv2.imshow('CAM_Window', frame)
     # 10ms 동안 키입력 대기
