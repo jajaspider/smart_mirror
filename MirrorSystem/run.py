@@ -250,7 +250,7 @@ def integrated():
     mise_status = mise_parse()
     metro_parse()
     scheduleRows = smdb.getSchedule()
-    schedule_str = "Schedule Time : " + scheduleRows[0]['schedule_time'] + "Subject : " + scheduleRows[0]['subject']
+    schedule_str = "Schedule Time : " + str(scheduleRows[0]['schedule_time']) + "Subject : " + str(scheduleRows[0]['subject'])
     weather_str = "Weather : " + weather_status
     mise_str = "Fine Dust : " + mise_status
     U_arrive_str = now_arrive_U
