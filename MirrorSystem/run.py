@@ -6,6 +6,9 @@ import socket
 import datetime
 import math
 from xml.dom import minidom
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 servicekey = "4YstE1tC4r8vbbmmDCGqQ3P65YsFYZOPASjitkuyZUNfgwKG3gCy0QZpKfWzjIUKaZPYZOtCgfm7uPyxw5jcbA%3D%3D"
 
@@ -148,7 +151,7 @@ for item in items:
         if node.nodeName == "pm10Cai":
             temp_pm10Cai = node.childNodes[0].nodeValue
         if node.nodeName == "site":
-            if node.childNodes[0].nodeValue == ("전포동").encode('utf-8'):
+            if node.childNodes[0].nodeValue == "전포동":
                 temp_pm10Cai = temp_pm10Cai.strip()
                 if temp_pm10Cai == "1":
                     print("[미세먼지] 좋음")
