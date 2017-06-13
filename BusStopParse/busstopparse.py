@@ -1,17 +1,8 @@
 # -*- coding: utf-8 -*-
-
+import os
 import urllib.request
 from xml.dom import minidom
-import time
-import os
 import datetime
-from socket import *
-from select import select
-
-SERVER_IP = '113.198.236.96'
-SERVER_PORT = '29903'
-BUF_SIZE = 1024
-ADDR = (SERVER_IP, SERVER_PORT)
 
 
 def crolling():
@@ -36,33 +27,22 @@ def crolling():
                 system_log(now_time, '[BusLocationSystem] ' + node.childNodes[0].nodeValue + ' bstopId Find')
                 location_log(now_time, node.childNodes[0].nodeValue)
                 print(node.childNodes[0].nodeValue)
-                send_data = node.childNodes[0].nodeValue
-                send_data = send_data + '/' + now_time + '/' + 'L'
             if node.nodeName == "bstopNm":
                 system_log(now_time, '[BusLocationSystem] ' + node.childNodes[0].nodeValue + ' bstopNm Find')
                 location_log(now_time, node.childNodes[0].nodeValue)
                 print(node.childNodes[0].nodeValue)
-                send_data = send_data + '/' + node.childNodes[0].nodeValue
             if node.nodeName == "gpsX":
                 system_log(now_time, '[BusLocationSystem] ' + node.childNodes[0].nodeValue + ' gpsX Find')
                 location_log(now_time, node.childNodes[0].nodeValue)
                 print(node.childNodes[0].nodeValue)
-                send_data = send_data + '/' + node.childNodes[0].nodeValue
             if node.nodeName == "gpsY":
                 system_log(now_time, '[BusLocationSystem] ' + node.childNodes[0].nodeValue + ' gpsY Find')
                 location_log(now_time, node.childNodes[0].nodeValue)
                 print(node.childNodes[0].nodeValue)
-                send_data = send_data + '/' + node.childNodes[0].nodeValue
                 location_log(now_time, '---------------')
                 print('---------------------')
             data_count+=1
     print("data_count : "+str(data_count))
-    send_result = server_connection(now_time, send_data)
-    if send_result == 1:
-        system_log(now_time, '[BusLocationSystem] Location Data Send End')
-    elif send_result == 0:
-        system_log(now_time, '[BusLocationSystem] Connection Fail, Keep Going')
-        return 0
     # time.sleep(90)
     # crolling()
 
@@ -96,24 +76,6 @@ def system_log(now_time, log_data):
     f.write('\n')
     f.close()
 
-
-def server_connection(now_time, send_data):
-    client_socket = socket(AF_INET, SOCK_STREAM)
-
-    try:
-        client_socket.connect(ADDR)
-    except Exception as e:
-        system_log(now_time, '[BusLocationSystem] Socket Connetion Fail')
-        return 0
-    system_log(now_time, '[BusLocationSystem] Socket Connetion Success')
-    print(send_data)
-
-    client_socket.send(send_data)
-    system_log(now_time, '[BusLocationSystem] Send Data Success')
-
-    client_socket.close()
-    system_log(now_time, '[BusLocationSystem] Socket Connetion Close')
-    return 1
 
 
 crolling()
