@@ -8,6 +8,9 @@ import math
 from xml.dom import minidom
 import cv2
 import sys
+import smdb
+import DHT22
+import threading
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -180,7 +183,9 @@ def mise_parse():
     return mise_status
 
 def metro_parse():
-    station_code = "PSS222"
+    rows = smdb.getMetroStation(gps_x, gps_y)
+    station_code = rows[0]['station_code']
+    #station_code = "PSS222"
     upDownTypeCode = "U"
     global end_station
     if (station_code[3] == "2") & (upDownTypeCode == "U"):
@@ -248,10 +253,22 @@ ip_parser()
 weather_status = weather_parse()
 mise_status = mise_parse()
 metro_parse()
+scheduleRows = smdb.getSchedule()
+schedule_str = "Schedule Time : "+scheduleRows[0]['schedule_time'] + "Subject : "+ scheduleRows[0]['subject']
 weather_str = "Weather : "+ weather_status
 mise_str = "Fine Dust : "+ mise_status
 U_arrive_str = now_arrive_U
 D_arrive_str = now_arrive_D
+tempData = smdb.getTemp()
+min_temp = tempData[0]['min_temp']
+max_temp = tempData[0]['max_temp']
+now_temp = DHT22.getNowTemp()
+if now_temp > max_temp :
+	#에어컨 켜기
+	os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_18")
+elif now_temp < min_temp :
+	#에어컨 끄기
+	os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_OFF")
 
 while True:
     ret, frame = cam.read()
