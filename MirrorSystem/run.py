@@ -240,12 +240,9 @@ if cam.isOpened() == False:  # 카메라 생성 확인
     "Can't open the CAM(%d)" % (CAM_ID)
     exit()
 
-# 윈도우 생성 및 사이즈 변경
 cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
-########### 추가 ##################
-# 문자열 저장
-###################################
+
 while True:
     ip_parser()
     weather_status = weather_parse()
@@ -255,7 +252,7 @@ while True:
     mise_str = "Fine Dust : "+ mise_status
     U_arrive_str = now_arrive_U
     D_arrive_str = now_arrive_D
-    # 카메라에서 이미지 얻기
+
     ret, frame = cam.read()
     ########### 추가 ##################
     # frame이라는 이미지에 글씨 넣는 함수
@@ -269,15 +266,13 @@ while True:
     cv2.putText(frame, mise_str, (0, 200), 2, 1, (255, 255, 255))
     cv2.putText(frame, U_arrive_str, (0, 300), 2, 1, (255, 255, 255))
     cv2.putText(frame, D_arrive_str, (0, 400), 2, 1, (255, 255, 255))
-    ###################################
 
-    # 얻어온 이미지 윈도우에 표시
+
     cv2.imshow('CAM_Window', frame)
     # 10ms 동안 키입력 대기
-    if cv2.waitKey(1)>=0:
+    if cv2.waitKey(10) >= 0:
         #cv2.destroyWindow('CAM_Window')
         break
 
-# 윈도우 종려
 cam.release()
 cv2.destroyWindow('CAM_Window')
