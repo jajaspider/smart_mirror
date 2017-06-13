@@ -288,6 +288,19 @@ def opencv_view(cam):
 
     cv2.imshow('CAM_Window', frame)
 
+
+CAM_ID = 0
+cam = cv2.VideoCapture(CAM_ID)
+if cam.isOpened() == False:
+    print
+    "Can't open the CAM(%d)" % (CAM_ID)
+    exit()
+
+cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
+cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
+cam.release()
+cv2.destroyWindow('CAM_Window')
+
 ip_parser()
 weather_status = weather_parse()
 mise_status = mise_parse()
@@ -309,19 +322,7 @@ elif now_temp < min_temp:
     # 에어컨 끄기
     os.system("irsend SEND_ONCE whisen UN-JEON/JEONG-JI_OFF")
 
-CAM_ID = 0
-cam = cv2.VideoCapture(CAM_ID)
-if cam.isOpened() == False:
-    print
-    "Can't open the CAM(%d)" % (CAM_ID)
-    exit()
-
-cv2.namedWindow('CAM_Window', cv2.WND_PROP_FULLSCREEN)
-cv2.setWindowProperty('CAM_Window', cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
-cam.release()
-cv2.destroyWindow('CAM_Window')
-
-th2 = threading.Thread(target=opencv_view, args=cam)
+th2 = threading.Thread(target=opencv_view, args=(cam, ))
 th2.daemon = True
 th2.start()
 th2.join()
